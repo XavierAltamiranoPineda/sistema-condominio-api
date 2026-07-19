@@ -26,7 +26,7 @@ public class CorsConfig {
 
         // Orígenes permitidos (separados por coma en la variable de entorno)
         List<String> origins = Arrays.asList(allowedOrigins.split(","));
-        config.setAllowedOrigins(origins);
+        config.setAllowedOriginsPatterns(origins);
 
         // Métodos HTTP permitidos
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
