@@ -71,6 +71,10 @@ public class ResidenciaService {
         Residente propietario = residenteRepository.findById(request.getIdPropietario())
                 .orElseThrow(() -> new ResourceNotFoundException("Residente", request.getIdPropietario()));
 
+        if (propietario.getEstado() == Residente.EstadoResidente.INACTIVO) {
+            throw new BusinessException("No se puede asignar un residente inactivo como propietario de una residencia");
+        }
+
         // Validar máximo de casas por propietario (doble capa: Service + trigger BD)
         long totalCasas = residenciaRepository.countByPropietario_IdResidente(propietario.getIdResidente());
         if (totalCasas >= MAX_CASAS_POR_PROPIETARIO) {
@@ -103,6 +107,10 @@ public class ResidenciaService {
         // Actualizar propietario — siempre obligatorio
         Residente nuevoPropietario = residenteRepository.findById(request.getIdPropietario())
                 .orElseThrow(() -> new ResourceNotFoundException("Residente", request.getIdPropietario()));
+
+        if (nuevoPropietario.getEstado() == Residente.EstadoResidente.INACTIVO) {
+            throw new BusinessException("No se puede asignar un residente inactivo como propietario de una residencia");
+        }
 
         // Verificar límite solo si el propietario cambia
         boolean propietarioCambia = !residencia.getPropietario().getIdResidente()
