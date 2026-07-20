@@ -72,6 +72,9 @@ public class ResidenteService {
         residente.setNombres(request.getNombres());
         residente.setApellidos(request.getApellidos());
         residente.setTelefono(request.getTelefono());
+        if (request.getEstado() != null) {
+            residente.setEstado(request.getEstado());
+        }
         return residenteMapper.toResponse(residenteRepository.save(residente));
     }
 

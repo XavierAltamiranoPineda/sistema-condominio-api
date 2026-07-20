@@ -27,4 +27,7 @@ public class ResidenteRequest {
 
     @Size(max = 15, message = "El teléfono no puede superar 15 caracteres")
     private String telefono;
+
+    @Schema(description = "Estado del residente", example = "ACTIVO", allowableValues = {"ACTIVO", "INACTIVO"})
+    private com.residencial.entity.Residente.EstadoResidente estado;
 }

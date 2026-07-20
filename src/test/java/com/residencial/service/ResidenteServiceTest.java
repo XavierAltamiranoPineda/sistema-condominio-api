@@ -41,7 +41,7 @@ class ResidenteServiceTest {
                 .idResidente(1L)
                 .nombres("Juan")
                 .apellidos("Pérez")
-                .cedula("0912345678")  // Cédula válida del Ecuador
+                .cedula("0912345675")  // Cédula válida del Ecuador
                 .telefono("0991234567")
                 .estado(Residente.EstadoResidente.ACTIVO)
                 .createdAt(LocalDateTime.now())
@@ -51,7 +51,7 @@ class ResidenteServiceTest {
                 .idResidente(1L)
                 .nombres("Juan")
                 .apellidos("Pérez")
-                .cedula("0912345678")
+                .cedula("0912345675")
                 .estado("ACTIVO")
                 .build();
     }
@@ -65,7 +65,7 @@ class ResidenteServiceTest {
         List<ResidenteResponse> resultado = residenteService.listarTodos();
 
         assertThat(resultado).hasSize(1);
-        assertThat(resultado.get(0).getCedula()).isEqualTo("0912345678");
+        assertThat(resultado.get(0).getCedula()).isEqualTo("0912345675");
     }
 
     @Test
@@ -74,9 +74,9 @@ class ResidenteServiceTest {
         ResidenteRequest request = new ResidenteRequest();
         request.setNombres("Ana");
         request.setApellidos("García");
-        request.setCedula("0912345678");
+        request.setCedula("0912345675");
 
-        when(residenteRepository.existsByCedula("0912345678")).thenReturn(true);
+        when(residenteRepository.existsByCedula("0912345675")).thenReturn(true);
 
         assertThatThrownBy(() -> residenteService.crear(request))
                 .isInstanceOf(DuplicateResourceException.class);
