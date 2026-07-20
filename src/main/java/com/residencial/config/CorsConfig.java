@@ -10,41 +10,93 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Configuración CORS para permitir el consumo de la API desde los clientes autorizados.
- * Los orígenes se configuran desde la variable de entorno CORS_ALLOWED_ORIGINS.
- */
 @Configuration
 public class CorsConfig {
 
-    @Value("${app.cors.allowed-origins:http://localhost:3000}")
+    @Value("${app.cors.allowed-origins:http://localhost:5173}")
     private String allowedOrigins;
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration config = new CorsConfiguration();
 
-        // Orígenes permitidos (separados por coma en la variable de entorno)
-        List<String> origins = Arrays.asList(allowedOrigins.split(","));
-        config.setAllowedOriginsPatterns(origins);
+        /*
+         * Permite múltiples orígenes separados por coma.
+         *
+         * Ejemplo:
+         *
+         * http://localhost:5173,
+         * https://miweb.vercel.app
+         */
 
-        // Métodos HTTP permitidos
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        List<String> origins =
+                Arrays.stream(allowedOrigins.split(","))
+                        .map(String::trim)
+                        .toList();
 
-        // Headers permitidos
-        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
 
-        // Exponer el header Authorization en la respuesta
-        config.setExposedHeaders(List.of("Authorization"));
+        /*
+         * Usamos patterns porque necesitamos permitir:
+         *
+         * *
+         *
+         * junto con:
+         *
+         * allowCredentials(true)
+         */
+        config.setAllowedOriginPatterns(origins);
 
-        // Permitir credenciales (cookies, Authorization headers)
+
+        config.setAllowedMethods(
+                List.of(
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "PATCH",
+                        "DELETE",
+                        "OPTIONS"
+                )
+        );
+
+
+        config.setAllowedHeaders(
+                List.of(
+                        "Authorization",
+                        "Content-Type",
+                        "Accept",
+                        "Origin"
+                )
+        );
+
+
+        config.setExposedHeaders(
+                List.of(
+                        "Authorization"
+                )
+        );
+
+
+        /*
+         * Necesario porque usamos JWT en Authorization Header
+         */
         config.setAllowCredentials(true);
 
-        // Tiempo de caché del preflight (en segundos)
+
         config.setMaxAge(3600L);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
+
+        source.registerCorsConfiguration(
+                "/**",
+                config
+        );
+
+
         return source;
     }
 }

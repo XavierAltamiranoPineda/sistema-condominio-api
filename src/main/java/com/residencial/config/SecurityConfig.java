@@ -60,12 +60,16 @@ public class SecurityConfig {
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(PUBLIC_URLS).permitAll()
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                // Control granular por rol via @PreAuthorize en cada Controller.
-                // Cualquier endpoint no listado arriba requiere autenticación mínima.
-                .anyRequest().authenticated()
-            )
+
+            .requestMatchers(HttpMethod.OPTIONS, "/**")
+            .permitAll()
+
+            .requestMatchers(PUBLIC_URLS)
+            .permitAll()
+
+            .anyRequest()
+            .authenticated()
+        )
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
