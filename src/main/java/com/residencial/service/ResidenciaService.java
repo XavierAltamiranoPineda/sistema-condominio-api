@@ -120,6 +120,11 @@ public class ResidenciaService {
         residencia.setPropietario(nuevoPropietario);
         residencia.setCuotaMensual(request.getCuotaMensual());
 
+        // Actualizar estado si se envía en el request
+        if (request.getEstado() != null) {
+            residencia.setEstado(request.getEstado());
+        }
+
         return residenciaMapper.toResponse(residenciaRepository.save(residencia));
     }
 

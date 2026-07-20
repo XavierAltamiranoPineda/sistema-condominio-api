@@ -1,5 +1,6 @@
 package com.residencial.dto.request;
 
+import com.residencial.entity.Residencia.EstadoResidencia;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -8,8 +9,6 @@ import java.math.BigDecimal;
 
 /**
  * DTO de entrada para crear o actualizar una residencia.
- *
- * CORRECCIÓN: idPropietario es ahora OBLIGATORIO (NOT NULL en BD).
  */
 @Getter @Setter
 @Schema(description = "Datos de una residencia")
@@ -30,4 +29,8 @@ public class ResidenciaRequest {
     @DecimalMax(value = "500.00", message = "La cuota mensual no puede superar $500")
     @Schema(description = "Cuota mensual en dólares", example = "80.00")
     private BigDecimal cuotaMensual;
+
+    /** Estado de la residencia — opcional, por defecto DESOCUPADA al crear */
+    @Schema(description = "Estado de la residencia", example = "OCUPADA", allowableValues = {"OCUPADA", "DESOCUPADA"})
+    private EstadoResidencia estado;
 }
