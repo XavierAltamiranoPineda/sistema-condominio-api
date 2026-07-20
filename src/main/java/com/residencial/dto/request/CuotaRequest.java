@@ -23,7 +23,7 @@ public class CuotaRequest {
     private Short mes;
 
     @NotNull(message = "El año es obligatorio")
-    @Min(value = 2000, message = "El año mínimo permitido es 2000")
+    @Min(value = 2026, message = "El año mínimo permitido es 2026")
     @Schema(description = "Año de la cuota", example = "2026")
     private Short anio;
 
